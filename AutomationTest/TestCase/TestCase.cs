@@ -1,6 +1,7 @@
 ﻿using AutomationTest.PageObjects;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.PageObjects;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,36 +14,19 @@ namespace AutomationTest
         [Fact]
         public void QATestCaseElements()
         {
-
             //Arrange
-            IWebDriver driver = new ChromeDriver();
-            driver.Url = "https://demoqa.com/";
-            var homePage = new HomePage(driver);
-            // PageFactory.InitElements(driver, homePage);
+            var driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://demoqa.com/");
 
+            HomePage homePage = PageFactory.InitElements<HomePage>(driver);
             //Act
-            homePage.elements.Click();
+            var elementsPage = homePage.GoToElementsPage();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(4);
             //Assert
-            IWebElement contentElements = driver.FindElement(By.ClassName(".col-12 mt-4 col-md-6"));
-            Assert.True(contentElements.Displayed);
-            driver.Dispose();
-        }
+            elementsPage.AssertElementsPageDisplayed();
 
-        [Fact]
-        public void QATestCaseForm()
-        {
-            //Arrange
-            IWebDriver driver = new ChromeDriver();
-            driver.Url = "https://demoqa.com/";
-            var homePage = new HomePage(driver);
-            // PageFactory.InitElements(driver, homePage);
-
-            //Act
-            homePage.elements.Click();
-            //Assert
-            IWebElement contentElements = driver.FindElement(By.ClassName(".col-12 mt-4 col-md-6"));
-            Assert.True(contentElements.Displayed);
             driver.Dispose();
+
         }
 
         [Fact]
@@ -51,39 +35,47 @@ namespace AutomationTest
             //Arrange
             IWebDriver driver = new ChromeDriver();
             driver.Url = "https://demoqa.com/elements";
-            var elementsPage = new ElementsPage(driver);
-            // PageFactory.InitElements(driver, homePage);
-
+            //      var elementsPage = new ElementsPage(driver);
+            ElementsPage elementsPage = PageFactory.InitElements<ElementsPage>(driver);
             //Act
-            elementsPage.TextBox.SendKeys("myName");
+
+            elementsPage.ClickTextBoxInMenuList();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(4);
+            elementsPage.GoToMaleFieldElement();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+            elementsPage.clickButton();
             //Assert
-            IWebElement contentElements = driver.FindElement(By.Id("#//input[@id='userName']"));
-            Assert.True(contentElements.Displayed);
-            driver.Dispose();
+            elementsPage.AssertEqualItIsGoodName();
+
+            // driver.Dispose();
+
+
         }
+
         [Fact]
-        public void QAFormCase()
+        public void QAFormCase() //Zgodnie z ustaleniami tu jest całkowity test formularza, powyżej tylko poprawione
         {
             //Arrange
             IWebDriver driver = new ChromeDriver();
             driver.Url = "https://demoqa.com/automation-practice-form";
-            var formsPage = new FormsPage(driver);
+            //  var formsPage = new FormsPage(driver);
+            FormsPage formsPage = PageFactory.InitElements<FormsPage>(driver);
             //Act
-            formsPage.MaleGender.Click();
+            formsPage.GoToPractiseForm();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+            formsPage.InputFirstName();
+            formsPage.InputLastName();
+            formsPage.InputGender();
+            formsPage.InputNumber();
+            formsPage.InputHobby();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(4);
+            formsPage.ClickSubmit();
             //Assert
-            IWebElement FormElement = driver.FindElement(By.XPath("//form[@id='userForm']"));
-            Assert.True(FormElement.Displayed);
+            formsPage.AssertFormsPageIsDisplayed();
             driver.Dispose();
         }
 
-        IWebDriver GoToURL(IWebDriver driver)
-        {
-            driver = new ChromeDriver();
-            driver.Url = "https://demoqa.com/";
-            return driver;
-        }
     }
-
 
 }
 
