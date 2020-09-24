@@ -1,6 +1,7 @@
 ﻿using AutomationTest.PageObjects;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.PageObjects;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace AutoTest03
     {
         static void Main(string[] args)
         {
-
+        
         }
     }
 }

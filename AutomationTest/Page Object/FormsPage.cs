@@ -37,11 +37,17 @@ namespace AutomationTest.PageObjects
         [FindsBy(How = How.XPath, Using = "//label[contains(text(),'Sports')]")]
         private IWebElement hobbySport;
 
-        [FindsBy(How = How.Id, Using = "submit")]
-        private IWebElement submitBtn;
+        [FindsBy(How = How.XPath, Using = "//button[@id='submit']")]
+        private IWebElement submitBtnForms;
 
         [FindsBy(How = How.XPath, Using = "//td[contains(text(),'Jurek Jarecki')]")]
         private IWebElement fullName;
+
+        [FindsBy(How = How.ClassName, Using = "css-tlfecz-indicatorContainer")]
+        private IWebElement stateAndCity;
+
+        [FindsBy(How = How.XPath, Using = "/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/form[1]/div[10]/div[2]/div[1]/div[1]/div[1]/div[1]")]
+        private IWebElement harayna;
         #region Methods
         public FormsPage GoToPractiseForm()
         {
@@ -49,14 +55,14 @@ namespace AutomationTest.PageObjects
             return this;
 
         }
-        public FormsPage InputFirstName()
+        public FormsPage InputFirstName(string inputFirstName)
         {
-            firstName.SendKeys("Jurek");
+            firstName.SendKeys(inputFirstName);
             return this;
         }
-        public FormsPage InputLastName()
+        public FormsPage InputLastName(string inputLastName)
         {
-            lastName.SendKeys("Jarecki");
+            lastName.SendKeys(inputLastName);
             return this;
         }
         public FormsPage InputGender()
@@ -64,9 +70,9 @@ namespace AutomationTest.PageObjects
             maleGender.Click();
             return this;
         }
-        public FormsPage InputNumber()
+        public FormsPage InputNumber(string inputNumber)
         {
-            mobileNumber.SendKeys("1234567890");
+            mobileNumber.SendKeys(inputNumber);
             return this;
         }
         public FormsPage InputHobby()
@@ -76,9 +82,22 @@ namespace AutomationTest.PageObjects
         }
         public FormsPage ClickSubmit()
         {
-            submitBtn.Click();
+            
+            submitBtnForms.Click();
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
             return this;
         }
+        public FormsPage SelectStateAndCity()
+        {
+
+            stateAndCity.Click();
+           // _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+            harayna.Click();
+
+            return this;
+        }
+        #endregion
+#region Asserts
         public FormsPage AssertFormsPageIsDisplayed()
         {
 
@@ -86,15 +105,17 @@ namespace AutomationTest.PageObjects
 
             return this;
         }
-        public FormsPage IsFullNameIsCorrect()
+               
+        public FormsPage AssertIsFullNameIsCorrect(string inputFirstName, string inputLastName)
         {
-            var name = _driver.FindElement(By.XPath("//td[contains(text(),'Jurek Jarecki')]"));
-            Assert.Equal(name, fullName);
+            string expectedFullName = inputFirstName + " " + inputLastName;
+            string actualFullName = _driver.FindElement(By.XPath("//td[contains(text(),'Jurek Jarecki')]")).Text;
+            Assert.Equal(expectedFullName, actualFullName);
 
             return this;
         }
-
-
         #endregion
+
+
     }
 }

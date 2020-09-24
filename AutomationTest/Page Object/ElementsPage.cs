@@ -57,10 +57,11 @@ namespace AutomationTest.PageObjects
             return this;
         }
 
-        public ElementsPage AssertEqualItIsGoodName()
+        public ElementsPage AssertEqualItIsGoodName(string expectedWord)
         {
-            var name = _driver.FindElement(By.XPath("//p[@id='name']"));
-            Assert.Equal(maleField.Equals("MiśPatyśXD"), name.Equals("MiśPatyśXD"));
+            expectedWord = "MiśPatyśxD";
+            var name = _driver.FindElement(By.XPath("//p[@id='name")).Text;
+            Assert.Equal(expectedWord, name = "MiśPatyśxD");
             return this;
         }
     }

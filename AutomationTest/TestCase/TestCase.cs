@@ -21,7 +21,7 @@ namespace AutomationTest
             HomePage homePage = PageFactory.InitElements<HomePage>(driver);
             //Act
             var elementsPage = homePage.GoToElementsPage();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(4);
+            System.Threading.Thread.Sleep(800);
             //Assert
             elementsPage.AssertElementsPageDisplayed();
 
@@ -35,44 +35,53 @@ namespace AutomationTest
             //Arrange
             IWebDriver driver = new ChromeDriver();
             driver.Url = "https://demoqa.com/elements";
-            //      var elementsPage = new ElementsPage(driver);
+            string word = "MiśPatyśXD";
             ElementsPage elementsPage = PageFactory.InitElements<ElementsPage>(driver);
             //Act
 
             elementsPage.ClickTextBoxInMenuList();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(4);
+            System.Threading.Thread.Sleep(250);
             elementsPage.GoToMaleFieldElement();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+            System.Threading.Thread.Sleep(800);
             elementsPage.clickButton();
             //Assert
-            elementsPage.AssertEqualItIsGoodName();
-
-            // driver.Dispose();
-
-
+            elementsPage.AssertEqualItIsGoodName(word);
+             driver.Dispose();
         }
 
         [Fact]
         public void QAFormCase() //Zgodnie z ustaleniami tu jest całkowity test formularza, powyżej tylko poprawione
         {
             //Arrange
+
+            // Dane testowe
+            string inputFirstName = "Jurek";
+            string inputLastName = "Jarecki";
+            string inputNumber = "1234567890";
             IWebDriver driver = new ChromeDriver();
             driver.Url = "https://demoqa.com/automation-practice-form";
             //  var formsPage = new FormsPage(driver);
             FormsPage formsPage = PageFactory.InitElements<FormsPage>(driver);
+            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
+
             //Act
             formsPage.GoToPractiseForm();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
-            formsPage.InputFirstName();
-            formsPage.InputLastName();
+            formsPage.InputFirstName(inputFirstName);
+            System.Threading.Thread.Sleep(25);
+            formsPage.InputLastName(inputLastName);
             formsPage.InputGender();
-            formsPage.InputNumber();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+            formsPage.InputNumber(inputNumber);
             formsPage.InputHobby();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(4);
+            System.Threading.Thread.Sleep(1500);
+            js.ExecuteScript("window.scrollBy(0,800);");
+            formsPage.SelectStateAndCity();
             formsPage.ClickSubmit();
             //Assert
             formsPage.AssertFormsPageIsDisplayed();
+            formsPage.AssertIsFullNameIsCorrect(inputFirstName, inputLastName);
             driver.Dispose();
+            //Wait untill selenium
         }
 
     }
